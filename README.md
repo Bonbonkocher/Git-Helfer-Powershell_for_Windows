@@ -37,7 +37,7 @@ DeinProjekt/
 ├── Scripts/              
 │   └── version.txt       <-- ZENTRALE VERSIONSQUELLE
 └── zip/                  <-- Lokaler Zwischenspeicher für Releases
-
+```
 ## 🚀 Installation
 
 1. **Dateien kopieren:** Kopiere `Git-Helfer-Start.bat` und `Git-Helfer-Programm.ps1` in dein Projekt-Hauptverzeichnis.
@@ -45,7 +45,7 @@ DeinProjekt/
    ```bash
    git --version  # Beispiel: "git version 2.53.0.windows.2"
    gh --version   # Beispiel: "gh version 2.89.0 (2026-03-26)"
-
+```
 Starte das Tool über die .bat Datei.
 
 ## 🔍 Fehlersuche (Troubleshooting)
