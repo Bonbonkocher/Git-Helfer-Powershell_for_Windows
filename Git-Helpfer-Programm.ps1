@@ -65,13 +65,35 @@ while ($true) {
             if (!(Get-Command gh -ErrorAction SilentlyContinue)) {
                 Write-Host "GitHub CLI nicht gefunden!" -ForegroundColor Red
             } else {
-                $version = Read-Host "Version (z.B. v1.0.0)"
-                $zip = Read-Host "Pfad zur ZIP"
-                if ($version -and (Test-Path $zip)) {
-                    gh release create $version $zip --generate-notes
-                    $letzteAktion = "Release $version erstellt"
+                $version = (Read-Host "Version (z.B. v0.0.7)").Trim()
+                
+                # --- Automatische ZIP-Suche ---
+                $zipOrdner = Join-Path $PSScriptRoot ".\zip"
+                $gefundeneZips = Get-ChildItem -Path $zipOrdner -Filter "*.zip" -ErrorAction SilentlyContinue
+                
+                $zipPath = ""
+
+                if ($gefundeneZips.Count -eq 1) {
+                    # Genau eine ZIP gefunden -> Automatisch vorschlagen
+                    $zipPath = $gefundeneZips[0].FullName
+                    Write-Host "ZIP automatisch gefunden: $($gefundeneZips[0].Name)" -ForegroundColor Green
+                } else {
+                    # Nichts oder zu viel gefunden -> Manuelle Abfrage
+                    Write-Host "ZIP konnte nicht automatisch eindeutig gefunden werden." -ForegroundColor Yellow
+                    $zipPath = Read-Host "Pfad zur ZIP-Datei (z.B. .\zip\mod.zip)"
+                }
+
+                # --- Release ausführen ---
+                if ($version -and (Test-Path $zipPath)) {
+                    Write-Host "Erstelle Release $version mit Datei $zipPath..." -ForegroundColor Yellow
+                    gh release create $version $zipPath --generate-notes
+                    $letzteAktion = "Release $version erstellt ($(Get-Date -Format 'HH:mm:ss'))"
+                } else {
+                    Write-Host "Fehler: Version leer oder ZIP-Pfad ungültig!" -ForegroundColor Red
+                    $letzteAktion = "Release fehlgeschlagen (Pfad/Version ungültig)"
                 }
             }
+            Write-Host "`nDruecke eine Taste..."
             $null = [Console]::ReadKey()
         }
         "q" {
