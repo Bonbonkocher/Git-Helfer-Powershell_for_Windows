@@ -63,6 +63,6 @@ Wenn Punkt **[5]** (Release) fehlschlägt, obwohl `gh` installiert ist, fehlt me
 * **Lösung:** Öffne ein Terminal (CMD oder PowerShell) und gib ein:
   ```bash
   gh auth login
-
+  ```
 ## 📝 Lizenz & Autor
 Autor: Jens (Bonbonkocher)
