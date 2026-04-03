@@ -1,65 +1,68 @@
 # 🛠️ Git-Helfer (PowerShell for Windows)
 
-Ein automatisiertes Kommandozeilen-Werkzeug, um den Workflow zwischen lokalen Projekten (z. B. Stationeers-Mods) und GitHub zu vereinfachen. Der Git-Helfer übernimmt lästige Routineaufgaben wie das Verwalten von Commits, das Erstellen von Releases und die Suche nach Upload-Dateien.
+Ein automatisiertes Werkzeug für Stationeers-Modder, um Projekte effizient mit GitHub zu synchronisieren und Releases zu erstellen.
 
 ---
 
 ## 🌟 Hauptfunktionen
 
-* **Smart Pull & Push:** Schnelle Synchronisation mit dem GitHub-Server inklusive automatischer Zeitstempel für Commit-Nachrichten.
-* **Intelligente Release-Automatik:** * Erstellt GitHub-Releases direkt aus dem Terminal.
-    * **Auto-Scan:** Sucht automatisch im benachbarten Ordner `.\zip` nach fertigen `.zip`-Dateien.
-    * Generiert automatisch Release-Notes basierend auf den letzten Commits.
-* **Status-Monitor:** * Detailansicht geänderter Zeilen (Diff).
-    * Kompakte Dateiliste der Änderungen (Status -s).
-* **Fehlerprüfung:** Überprüft die Existenz der GitHub-CLI (`gh`) und validiert Dateipfade vor dem Hochladen.
+* **Dauerhafte Versionsverwaltung:** Die aktuelle Versionsnummer wird zentral in `Scripts\version.txt` gespeichert und bei jedem Programmstart automatisch geladen.
+* **Intelligente ZIP-Erstellung:** * Erstellt eine ZIP-Datei im Format `ModName-Version.zip`.
+    * Packt nur die relevanten Mod-Ordner (`About`, `Data`, `Scripts`).
+    * Räumt das `.\zip` Verzeichnis vor jedem neuen Packvorgang automatisch auf.
+* **GitHub Release-Automation:** Lädt die erstellte ZIP-Datei direkt als neuen Release (inkl. Tagging) hoch.
+* **Git-Workflow:** Schneller Zugriff auf `Pull`, `Push` und `Status` direkt aus dem Menü.
 
 ---
 
+## 📂 Projekt-Struktur & Versionierung
 
-## ⚠️ Wichtiger Installations-Hinweis (Sicherheit)
+Der Git-Helfer nutzt eine **Master-Quelle** für die Versionierung:
 
-Damit deine ZIP-Dateien **nicht** im Quellcode-Repository landen, sondern nur im "Release"-Bereich, musst du deine `.gitignore` Datei anpassen:
+1. **Scripts\version.txt:** Hier steht die reine Versionsnummer (z. B. `0.0.9`). 
+2. Das Skript liest diesen Wert beim Start aus und nutzt ihn für:
+   * Den Dateinamen der ZIP.
+   * Den Release-Tag auf GitHub (z. B. `v0.0.9`).
+   * Den Titel des Releases.
 
-1. Öffne die Datei `.gitignore` in deinem Projekt-Ordner.
-2. Füge folgende Zeile hinzu:
-   ```text
-   zip/
-   
-## 🚀 Installation & Vorbereitung
+### Empfohlene Ordnerstruktur:
+```text
+DeinProjekt/
+├── .git/
+├── .gitignore            <-- Wichtig: /zip/ hier eintragen!
+├── Git-Helfer-Start.bat
+├── Git-Helfer-Programm.ps1
+├── About/                <-- Mod-Daten
+├── Data/                 <-- Mod-Daten
+├── Scripts/              
+│   └── version.txt       <-- ZENTRALE VERSIONSQUELLE
+└── zip/                  <-- Lokaler Zwischenspeicher für Releases
 
-1.  **Voraussetzungen:**
-    * [Git for Windows](https://git-scm.com/) muss installiert sein.
-    * [GitHub CLI (gh)](https://cli.github.com/) wird für die Release-Funktion benötigt.
-2.  **Projekt kopieren:**
-    Lade die `Git-Helfer-Start.bat` und die `Git-Helfer-Programm.ps1` in deinen Projekt-Hauptordner (wo auch der `.git`-Ordner liegt).
-3.  **Ordnerstruktur (Empfohlen):**
-    ```text
-    DeinProjekt/
-    ├── .git/
-    ├── .gitignore            <-- Wichtig: zip/ hier eintragen!
-    ├── Git-Helfer-Start.bat
-    ├── Git-Helfer-Programm.ps1
-    └── zip/                  <-- Hier legst du deine fertige Mod.zip rein
-        └── DeineMod.zip
-    ```
+## 🚀 Installation
 
----
+1. **Dateien kopieren:** Kopiere `Git-Helfer-Start.bat` und `Git-Helfer-Programm.ps1` in dein Projekt-Hauptverzeichnis.
+2. **Voraussetzungen prüfen:** Stelle sicher, dass Git und die GitHub CLI installiert sind. Teste dies in deinem Terminal:
+   ```bash
+   git --version  # Beispiel: "git version 2.53.0.windows.2"
+   gh --version   # Beispiel: "gh version 2.89.0 (2026-03-26)"
 
-## 🛠️ Benutzung
+Starte das Tool über die .bat Datei.
 
-Starte einfach die **`Git-Helfer-Start.bat`**. Ein interaktives Menü führt dich durch die Funktionen:
+## 🔍 Fehlersuche (Troubleshooting)
 
-* **[1] Pull:** Lädt den neuesten Stand von GitHub.
-* **[2] Push:** Fügt alle Änderungen hinzu (`git add .`), erstellt einen Commit und lädt ihn hoch.
-* **[3] Status-Zeile:** Zeigt dir genau, welchen Code du geändert hast.
-* **[5] Release:** Fragt nach der Versionsnummer und verknüpft automatisch die gefundene ZIP-Datei mit dem GitHub-Release.
+Falls das Tool eine Fehlermeldung ausgibt, prüfe bitte folgende Punkte:
 
----
+### 1. Fehler: "Der Befehl 'git' wurde nicht gefunden"
+Dies passiert, wenn Git nicht installiert ist oder nicht im Windows-PATH registriert wurde.
+* **Symptom:** Punkt [0], [1], [2], [3] oder [4] werfen rote Fehlermeldungen in der PowerShell.
+* **Lösung:** Installiere [Git for Windows](https://git-scm.com/). Starte nach der Installation deinen PC oder zumindest das Terminal neu.
+
+### 2. GitHub-Authentifizierung (Login)
+Wenn Punkt **[5]** (Release) fehlschlägt, obwohl `gh` installiert ist, fehlt meist die Anmeldung.
+* **Symptom:** Fehlermeldung wie "Notice: authentication required" oder "403 Forbidden".
+* **Lösung:** Öffne ein Terminal (CMD oder PowerShell) und gib ein:
+  ```bash
+  gh auth login
 
 ## 📝 Lizenz & Autor
-
-* **Autor:** Jens (Bonbonkocher)
-* **Projekt-Link:** [Git-Helfer auf GitHub](https://github.com/Bonbonkocher/Git-Helfer-Powershell_for_Windows)
-
-*Entwickelt für die Stationeers Modding-Community und alle, die Git unkompliziert nutzen möchten.*
+Autor: Jens (Bonbonkocher)
