@@ -4,7 +4,7 @@ Ein einfaches Werkzeug-Set, um den Workflow mit Git und GitHub Releases zu autom
 
 ### Funktionen:
 * Automatisches Erstellen von Tags.
-* Synchronisation mit GitHub (Push).
+* Synchronisation mit GitHub (`Push, Pull`).
 * Erstellen von Releases mit der GitHub CLI (`gh`).
 
 ### Nutzung:
