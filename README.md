@@ -48,7 +48,7 @@ DeinProjekt/
 ```
 ## Vorbereitung:
 Es muss .git generiert werden in dem man über PowerShell: "gh repo clone [NAME]/[Projeckt]", damit ein GitHub-Pfad genierirt wird
-* **HINWEIS** dafür wird 
+* **HINWEIS** dafür wird `GitHub CLI` benötigt
 
 ## Nutzung:
 Starte das Tool über die .bat Datei.
