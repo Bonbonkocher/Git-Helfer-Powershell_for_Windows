@@ -41,11 +41,16 @@ DeinProjekt/
 ## 🚀 Installation
 
 1. **Dateien kopieren:** Kopiere `Git-Helfer-Start.bat` und `Git-Helfer-Programm.ps1` in dein Projekt-Hauptverzeichnis.
-2. **Voraussetzungen prüfen:** Stelle sicher, dass Git und die GitHub CLI installiert sind. Teste dies in deinem Terminal:
+2. **Voraussetzungen prüfen:** Stelle sicher, dass `Git` und die `GitHub CLI` installiert sind. Teste dies in deinem Terminal:
    ```bash
-   git --version  # Beispiel: "git version 2.53.0.windows.2"
-   gh --version   # Beispiel: "gh version 2.89.0 (2026-03-26)"
+   Git = git --version  # Beispiel: "git version 2.53.0.windows.2"
+   GitHub CLI = gh --version   # Beispiel: "gh version 2.89.0 (2026-03-26)"
 ```
+## Vorbereitung:
+Es muss .git generiert werden in dem man über PowerShell: "gh repo clone [NAME]/[Projeckt]", damit ein GitHub-Pfad genierirt wird
+* **HINWEIS** dafür wird 
+
+## Nutzung:
 Starte das Tool über die .bat Datei.
 
 ## 🔍 Fehlersuche (Troubleshooting)
